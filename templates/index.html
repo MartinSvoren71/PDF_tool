@@ -35,14 +35,14 @@ input {
         <button type="submit">Search</button>
     </form>
     <div class="results">
-        {% for filepath, matches in results.items() %}
-            <h2>{{ filepath }}</h2>
-            <ul>
-                {% for page_num, match in matches %}
-                    <li>Page {{ page_num + 1 }}: {{ match }}</li>
-                {% endfor %}
-            </ul>
+       {% if encrypted_files %}
+    <h3>Encrypted files (not processed):</h3>
+    <ul>
+        {% for filepath in encrypted_files %}
+            <li>{{ filepath }}</li>
         {% endfor %}
+    </ul>
+{% endif %}
     </div>
 </body>
 </html>

@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 def search_pdf_files(keyword, directory):
     results = {}
+    encrypted_files = []  # List to store encrypted files
     for root, _, files in os.walk(directory):
         for file in files:
             if file.endswith('.pdf'):
@@ -16,6 +17,7 @@ def search_pdf_files(keyword, directory):
                         pdf_reader = PdfFileReader(pdf_file)
                         if pdf_reader.isEncrypted:
                             print(f"Skipping encrypted file: {filepath}")
+                            encrypted_files.append(filepath)  # Add the encrypted file to the list
                             continue
                         for page_num in range(pdf_reader.getNumPages()):
                             text = pdf_reader.getPage(page_num).extractText()
@@ -27,16 +29,15 @@ def search_pdf_files(keyword, directory):
                                 results[filepath].extend([(page_num, match) for match in matches])
                 except Exception as e:
                     print(f"Error processing {filepath}: {str(e)}")
-    return results
+    return results, encrypted_files
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     search_results = {}
+    encrypted_files = []
     if request.method == 'POST':
         keyword = request.form['keyword']
         directory = "/"  # Replace with the specific directory you want to search
-        search_results = search_pdf_files(keyword, directory)
-    return render_template('index.html', results=search_results)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+        search_results, encrypted_files = search_pdf_files(keyword, directory)
+    return render_template('index.html', results=search_results, encrypted_files=encrypted_files)
