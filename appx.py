@@ -3,7 +3,7 @@ import glob
 
 def search_pdf_files(keyword, directory):
     results = []
-    for filename in glob.glob(f"{directory}/*.pdf"):
+    for filename in glob.glob(f"{directory}/sample.pdf"):
         text = textract.process(filename).decode("utf-8")
         lines = text.split("\n")
         for line_num, line in enumerate(lines):
