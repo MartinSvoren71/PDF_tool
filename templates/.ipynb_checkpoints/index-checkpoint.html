@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Knowledge Base</title>
+</head>
+<body>
+    <h1>PDF Knowledge Base</h1>
+    <form action="/search" method="post">
+        <label for="query">Search query:</label>
+        <input type="text" name="query" id="query" required>
+        <input type="submit" value="Search">
+    </form>
+    
+    {% if results %}
+    <h2>Results:</h2>
+    <ul>
+        {% for result in results %}
+        <li>
+            <strong>{{ result['title'] }}</strong><br>
+            {{ result.highlights("content")|safe }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
