@@ -1,12 +1,5 @@
-<html>
-  <head>
-    <title>PDF Search</title>
-  </head>
-  <body>
-    <h1>PDF Search</h1>
-    <form action="/" method="post">
-      <input type="text" name="keyword">
-      <input type="submit" value="Search">
-    </form>
-  </body>
-</html>
+<form action="{{ url_for('results') }}" method="post">
+    Keyword: <input type="text" name="keyword">
+    Directory: <input type="text" name="directory">
+    <input type="submit" value="Search">
+</form>

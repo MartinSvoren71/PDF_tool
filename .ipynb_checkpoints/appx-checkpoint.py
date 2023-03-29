@@ -1,25 +1,29 @@
 from flask import Flask, request, render_template
-import textract
 import glob
+from pdfminer.high_level import extract_text
 
 app = Flask(__name__)
 
+@app.route("/")
+def search():
+    return render_template("search.html")
+
+@app.route("/results", methods=["POST"])
+def results():
+    keyword = request.form["keyword"]
+    directory = request.form["directory"]
+    results = search_pdf_files(keyword, directory)
+    return render_template("result.html", results=results)
+
 def search_pdf_files(keyword, directory):
     results = []
-    for filename in glob.glob(f"{directory}/*.pdf"):
-        text = textract.process(filename).decode("utf-8")
+    for filename in glob.glob(f"{directory}/sample.pdf"):
+        text = extract_text(filename)
         lines = text.split("\n")
         for line_num, line in enumerate(lines):
             if keyword in line:
                 results.append((filename, line_num, line))
     return results
 
-@app.route("/", methods=["GET", "POST"])
-def search():
-    if request.method == "POST":
-        keyword = request.form["keyword"]
-        results = search_pdf_files(keyword, "pdf_files")
-        return render_template("results.html", keyword=keyword, results=results)
-    return render_template("search.html")
-
-app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(debug=True)
