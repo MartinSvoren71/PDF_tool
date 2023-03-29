@@ -13,7 +13,7 @@ def results():
     keyword = request.form["keyword"]
     directory = request.form["directory"]
     results = search_pdf_files(keyword, directory)
-    return render_template("result.html", results=results)
+    return render_template("results.html", results=results)
 
 def search_pdf_files(keyword, directory):
     results = []
