@@ -22,6 +22,4 @@ def search():
         return render_template("results.html", keyword=keyword, results=results)
     return render_template("search.html")
 
-t = Thread(target=initialize_ai)
-t.start()
 app.run(host='0.0.0.0', port=5000)
