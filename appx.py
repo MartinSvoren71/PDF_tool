@@ -12,19 +12,23 @@ def search_pdf_files(keyword, directory):
             if file.endswith('.pdf'):
                 filepath = os.path.join(root, file)
                 try:
-                    with open(filepath, 'rb') as pdf_file:
-                        pdf_reader = PdfFileReader(pdf_file)
-                        for page_num in range(pdf_reader.getNumPages()):
-                            text = pdf_reader.getPage(page_num).extractText()
-                            pattern = re.compile(r'(?<=\.)([^.]*\b{}\b[^.]*(?:\.[^.]*){{0,1}})'.format(keyword))
-                            matches = pattern.findall(text)
-                            if matches:
-                                if filepath not in results:
-                                    results[filepath] = []
-                                results[filepath].extend([(page_num, match) for match in matches])
-                except Exception as e:
-                    print(f"Error processing {filepath}: {str(e)}")
-    return results
+    with open(filepath, 'rb') as pdf_file:
+        pdf_reader = PdfFileReader(pdf_file)
+        if pdf_reader.isEncrypted:
+            print(f"Skipping encrypted file: {filepath}")
+            continue
+        for page_num in range(pdf_reader.getNumPages()):
+            text = pdf_reader.getPage(page_num).extractText()
+            pattern = re.compile(r'(?<=\.)([^.]*\b{}\b[^.]*(?:\.[^.]*){{0,1}})'.format(keyword))
+            matches = pattern.findall(text)
+            if matches:
+                if filepath not in results:
+                    results[filepath] = []
+                results[filepath].extend([(page_num, match) for match in matches])
+except Exception as e:
+    print(f"Error processing {filepath}: {str(e)}")
+return results
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
