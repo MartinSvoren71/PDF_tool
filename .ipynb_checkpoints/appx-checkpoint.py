@@ -4,7 +4,7 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 
 # Open the PDF file
-pdf = PdfFileReader("sample.pdf")
+pdf = PdfFileReader("sample1.pdf")
 
 # Check if the PDF is encrypted
 if pdf.isEncrypted:
