@@ -10,3 +10,8 @@ def search_pdf_files(keyword, directory):
             if keyword in line:
                 results.append((filename, line_num, line))
     return results
+
+
+results = search_pdf_files("capital", "pdf_files")
+for result in results:
+    print(result)
