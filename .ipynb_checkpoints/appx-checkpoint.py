@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template
-import glob
 from pdfminer.high_level import extract_text
 
 app = Flask(__name__)
@@ -12,17 +11,17 @@ def search():
 def results():
     keyword = request.form["keyword"]
     directory = request.form["directory"]
-    results = search_pdf_files(keyword, directory)
+    results = search_pdf_file(keyword, directory)
     return render_template("results.html", results=results)
 
-def search_pdf_files(keyword, directory):
+def search_pdf_file(keyword, directory):
+    filename = f"{directory}/sample.pdf"
     results = []
-    for filename in glob.glob(f"{directory}/sample.pdf"):
-        text = extract_text(filename)
-        lines = text.split("\n")
-        for line_num, line in enumerate(lines):
-            if keyword in line:
-                results.append((filename, line_num, line))
+    text = extract_text(filename)
+    lines = text.split("\n")
+    for line_num, line in enumerate(lines):
+        if keyword in line:
+            results.append((filename, line_num, line))
     return results
 
 
