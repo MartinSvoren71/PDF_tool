@@ -1,14 +1,16 @@
-<table>
-    <tr>
-        <th>Filename</th>
-        <th>Line Number</th>
-        <th>Line</th>
-    </tr>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Search Results</title>
+  </head>
+  <body>
+    <h1>Search Results</h1>
     {% for result in results %}
-        <tr>
-            <td>{{ result[0] }}</td>
-            <td>{{ result[1] }}</td>
-            <td>{{ result[2] }}</td>
-        </tr>
+      <p>Filename: {{ result[0] }}</p>
+      <p>Line Number: {{ result[1] }}</p>
+      <p>Line: {{ result[2] }}</p>
+      <br><br>
     {% endfor %}
-</table>
+  </body>
+</html>

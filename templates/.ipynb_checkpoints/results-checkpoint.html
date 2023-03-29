@@ -1,23 +1,16 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>PDF Search Results</title>
+    <meta charset="utf-8">
+    <title>Search Results</title>
   </head>
   <body>
-    <h1>PDF Search Results</h1>
-    <p>Keyword: {{ keyword }}</p>
-    <table>
-      <tr>
-        <th>File</th>
-        <th>Line Number</th>
-        <th>Line</th>
-      </tr>
-      {% for result in results %}
-        <tr>
-          <td>{{ result[0] }}</td>
-          <td>{{ result[1] }}</td>
-          <td>{{ result[2] }}</td>
-        </tr>
-      {% endfor %}
-    </table>
+    <h1>Search Results</h1>
+    {% for result in results %}
+      <p>Filename: {{ result[0] }}</p>
+      <p>Line Number: {{ result[1] }}</p>
+      <p>Line: {{ result[2] }}</p>
+      <br><br>
+    {% endfor %}
   </body>
 </html>

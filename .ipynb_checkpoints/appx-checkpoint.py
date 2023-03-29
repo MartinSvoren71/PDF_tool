@@ -1,8 +1,22 @@
+from PyPDF4 import PdfFileReader
 from flask import Flask, request, render_template
-from pdfminer.high_level import extract_text
 
 app = Flask(__name__)
 
+# Open the PDF file
+pdf = PdfFileReader("Sample.pdf")
+
+# Check if the PDF is encrypted
+if pdf.isEncrypted:
+    # Try to decrypt the PDF
+    pdf.decrypt("")
+
+# Save the decrypted PDF to a new file
+with open("Output.pdf", "wb") as f:
+    pdf_writer = PdfFileWriter()
+    pdf_writer.addPage(pdf.getPage(0))
+    pdf_writer.write(f)
+    
 @app.route("/")
 def search():
     return render_template("search.html")
@@ -10,18 +24,19 @@ def search():
 @app.route("/results", methods=["POST"])
 def results():
     keyword = request.form["keyword"]
-    directory = request.form["directory"]
-    results = search_pdf_file(keyword)
+    pdf_file = request.form["Output.pdf"]
+    results = search_pdf(keyword, pdf_file)
     return render_template("results.html", results=results)
 
-def search_pdf_file(keyword, ):
-    filename = "sample.pdf"
+def search_pdf(keyword, pdf_file):
     results = []
-    text = extract_text(filename)
-    lines = text.split("\n")
-    for line_num, line in enumerate(lines):
-        if keyword in line:
-            results.append((filename, line_num, line))
+    pdf = PdfFileReader(pdf_file)
+    for page_num, page in enumerate(pdf.pages):
+        text = page.extract_text()
+        lines = text.split("\n")
+        for line_num, line in enumerate(lines):
+            if keyword in line:
+                results.append((page_num, line_num, line))
     return results
 
 
