@@ -1,43 +1,39 @@
-from PyPDF4 import PdfFileReader, PdfFileWriter
-from flask import Flask, request, render_template
+import os
+import re
+from flask import Flask, render_template, request
+from PyPDF4 import PdfFileReader
 
 app = Flask(__name__)
 
-# Open the PDF file
-pdf = PdfFileReader("sample1.pdf")
-
-# Check if the PDF is encrypted
-if pdf.isEncrypted:
-    # Try to decrypt the PDF
-    pdf.decrypt("")
-
-# Save the decrypted PDF to a new file
-with open("Output.pdf", "wb") as f:
-    pdf_writer = PdfFileWriter()
-    pdf_writer.addPage(pdf.getPage(0))
-    pdf_writer.write(f)
-    
-@app.route("/")
-def search():
-    return render_template("search.html")
-
-@app.route("/results", methods=["POST"])
-def results():
-    keyword = request.form["keyword"]
-    pdf_file = request.form["Output.pdf"]
-    results = search_pdf(keyword, pdf_file)
-    return render_template("results.html", results=results)
-
-def search_pdf(keyword, pdf_file):
-    results = []
-    pdf = PdfFileReader(pdf_file)
-    for page_num, page in enumerate(pdf.pages):
-        text = page.extract_text()
-        lines = text.split("\n")
-        for line_num, line in enumerate(lines):
-            if keyword in line:
-                results.append((page_num, line_num, line))
+def search_pdf_files(keyword, directory):
+    results = {}
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.pdf'):
+                filepath = os.path.join(root, file)
+                try:
+                    with open(filepath, 'rb') as pdf_file:
+                        pdf_reader = PdfFileReader(pdf_file)
+                        for page_num in range(pdf_reader.getNumPages()):
+                            text = pdf_reader.getPage(page_num).extractText()
+                            pattern = re.compile(r'(?<=\.)([^.]*\b{}\b[^.]*(?:\.[^.]*){{0,1}})'.format(keyword))
+                            matches = pattern.findall(text)
+                            if matches:
+                                if filepath not in results:
+                                    results[filepath] = []
+                                results[filepath].extend([(page_num, match) for match in matches])
+                except Exception as e:
+                    print(f"Error processing {filepath}: {str(e)}")
     return results
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    search_results = {}
+    if request.method == 'POST':
+        keyword = request.form['keyword']
+        directory = "specific_directory"  # Replace with the specific directory you want to search
+        search_results = search_pdf_files(keyword, directory)
+    return render_template('index.html', results=search_results)
 
-app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(debug=True)

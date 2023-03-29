@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>PDF Keyword Search</title>
+</head>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+input, button {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+input {
+    flex-grow: 1;
+    margin-right:
+
+        </style>
+<body>
+    <h1>PDF Keyword Search</h1>
+    <form method="POST">
+        <input type="text" name="keyword" placeholder="Enter keyword" required>
+        <button type="submit">Search</button>
+    </form>
+    <div class="results">
+        {% for filepath, matches in results.items() %}
+            <h2>{{ filepath }}</h2>
+            <ul>
+                {% for page_num, match in matches %}
+                    <li>Page {{ page_num + 1 }}: {{ match }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+</body>
+</html>
