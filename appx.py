@@ -11,11 +11,11 @@ def search():
 def results():
     keyword = request.form["keyword"]
     directory = request.form["directory"]
-    results = search_pdf_file(keyword, directory)
+    results = search_pdf_file(keyword)
     return render_template("results.html", results=results)
 
-def search_pdf_file(keyword, directory):
-    filename = f"{directory}/sample.pdf"
+def search_pdf_file(keyword, ):
+    filename = "sample.pdf"
     results = []
     text = extract_text(filename)
     lines = text.split("\n")
