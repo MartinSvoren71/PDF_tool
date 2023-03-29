@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>PDF Search Results</title>
+  </head>
+  <body>
+    <h1>PDF Search Results</h1>
+    <p>Keyword: {{ keyword }}</p>
+    <table>
+      <tr>
+        <th>File</th>
+        <th>Line Number</th>
+        <th>Line</th>
+      </tr>
+      {% for result in results %}
+        <tr>
+          <td>{{ result[0] }}</td>
+          <td>{{ result[1] }}</td>
+          <td>{{ result[2] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

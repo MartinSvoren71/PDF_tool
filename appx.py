@@ -1,5 +1,8 @@
+from flask import Flask, request, render_template
 import textract
 import glob
+
+app = Flask(__name__)
 
 def search_pdf_files(keyword, directory):
     results = []
@@ -11,6 +14,13 @@ def search_pdf_files(keyword, directory):
                 results.append((filename, line_num, line))
     return results
 
-results = search_pdf_files("temperature", "/")
-for result in results:
-    print(f"{result[0]}, line {result[1]}: {result[2]}")
+@app.route("/", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        keyword = request.form["keyword"]
+        results = search_pdf_files(keyword, "pdf_files")
+        return render_template("results.html", keyword=keyword, results=results)
+    return render_template("search.html")
+
+if __name__ == "__main__":
+    app.run()
