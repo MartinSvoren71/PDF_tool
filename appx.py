@@ -10,7 +10,7 @@ def search_pdf_files(keyword, directory):
     for root, _, files in os.walk(directory):
         for file in files:
             if file.endswith('.pdf'):
-                filepath = os.path.join(root[len(directory):], file)
+                filepath = os.path.join(root[len(directory) - 1:], file)
                 try:
                     with open(filepath, 'rb') as pdf_file:
                         pdf_reader = PdfFileReader(pdf_file)
