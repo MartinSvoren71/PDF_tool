@@ -9,7 +9,7 @@ def search_pdf_files(keyword, directory):
     results = {}
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith('discovery.pdf'):
+            if file.endswith('.pdf'):
                 filepath = os.path.join(root, file)
                 try:
                     with open(filepath, 'rb') as pdf_file:
@@ -31,8 +31,9 @@ def index():
     search_results = {}
     if request.method == 'POST':
         keyword = request.form['keyword']
-        directory = "specific_directory"  # Replace with the specific directory you want to search
+        directory = "/"  # Replace with the specific directory you want to search
         search_results = search_pdf_files(keyword, directory)
     return render_template('index.html', results=search_results)
 
-app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
