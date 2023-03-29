@@ -9,7 +9,7 @@ def search_pdf_files(keyword, directory):
     results = {}
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith('.pdf'):
+            if file.endswith('discovery.pdf'):
                 filepath = os.path.join(root, file)
                 try:
                     with open(filepath, 'rb') as pdf_file:
