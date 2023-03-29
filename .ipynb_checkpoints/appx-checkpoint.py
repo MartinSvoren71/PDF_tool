@@ -41,3 +41,7 @@ def index():
         directory = "/"  # Replace with the specific directory you want to search
         search_results, encrypted_files = search_pdf_files(keyword, directory)
     return render_template('index.html', results=search_results, encrypted_files=encrypted_files)
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
