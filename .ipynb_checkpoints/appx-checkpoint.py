@@ -3,15 +3,14 @@ import re
 from flask import Flask, render_template, request
 from PyPDF4 import PdfFileReader
 
-app = Flask(__name__)
-
+app = Flask(__name__, static_folder='/')
 def search_pdf_files(keyword, directory):
     results = {}
     encrypted_files = []  # List to store encrypted files
     for root, _, files in os.walk(directory):
         for file in files:
             if file.endswith('.pdf'):
-                filepath = os.path.join(root, file)
+                filepath = os.path.join(root[len(directory):], file)
                 try:
                     with open(filepath, 'rb') as pdf_file:
                         pdf_reader = PdfFileReader(pdf_file)
