@@ -1,5 +1,15 @@
-<form action="{{ url_for('results') }}" method="post">
-    Keyword: <input type="text" name="keyword">
-    Directory: <input type="text" name="directory">
-    <input type="submit" value="Search">
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PDF Keyword Search</title>
+  </head>
+  <body>
+    <h1>PDF Keyword Search</h1>
+    <form action="http://localhost:5000/results" method="post">
+      Keyword: <input type="text" name="keyword">
+      <br><br>
+      <input type="submit" value="Search">
+    </form> 
+  </body>
+</html>
