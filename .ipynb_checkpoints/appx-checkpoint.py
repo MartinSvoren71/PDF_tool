@@ -1,4 +1,4 @@
-from PyPDF4 import PdfFileReader
+from PyPDF4 import PdfFileReader, PdfFileWriter
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
